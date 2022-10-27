@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>AJAX, XML</title>
+    </head>
+    <body>
+        <h2>XML Request</h2>
+        <h3>Retrieve data from an XML file</h3>
+        <p>Status: <span id="status"></span></p>
+        <p>Status text: <span id="statusText"></span></p>
+        <p>Result:</p>
+        <div id="showCD"></div><br>
+        <button type="button" onclick="previous()"><<</button>
+        <button type="button" onclick="next()">>></button>
+
+        <button type="button" onclick="loadDoc('catalog.xml')">Get XML data</button>
+
+        <script>
+            function loadDoc(url) {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("status").innerHTML = this.status;
+                        document.getElementById("statusText").innerHTML = this.statusText;
+                        ParseCatalog(this.responseXML);
+                        showCD(this.responseXML);
+                        //document.getElementById("result").innerHTML = this.responseText;
+                    }
+                };
+                xhttp.open("GET", url, true);
+                xhttp.send();
+            }
+            function ParseCatalog(xml) {
+                var table="<table><tr><th>Artist</th><th>Title</th></tr>";
+                // parse xml value to table
+                var cds=xml.getElementByTagName("CD");
+                var i;
+                for (i=0;i<cds.length;i++) {
+                    table+="<tr><td>" + x[i].getElementByTagName("ARTIST")[0].childNodes[0].nodeValue + 
+                    "</td><td>" +
+                    x[i].getElementByTagName("TITLE")[0].childNodes[0].nodeValue +
+                    "</td></tr>";
+                }
+                table+="</table>";
+                document.getElementById("result").innerHTML = table;
+            }
+
+            function showCD(xml){
+                cds=xml.getElementByTagName("CD");
+
+                document.getElementById("showCD").innerHTML =
+                "Artist: " +
+                cds[0].getElementByTagName("ARTIST")[0].childNodes[0].nodeValue +
+                "<br>Title: " +
+                cds[0].getElementByTagName("TITLE")[0].childNodes[0].nodeValue +
+                "<br>Year: " +
+                cds[0].getElementByTagName("YEAR")[0].childNodes[0].nodeValue +
+                "<br>Country: " +
+                cds[0].getElementByTagName("COUNTRY")[0].childNodes[0].nodeValue;
+            }
+
+            function next(){
+                
+            }
+            
+            function previous(){
+                
+            }
+
+        </script>
+    </body>
+</html>
